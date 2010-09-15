@@ -47,11 +47,11 @@ Accessing this action, you should see:
 	Jane
 	Maria
 
-Now say we didn't want to store TAL views with a 'php' extension. We would like to use 'html' instead. Simply change the extension on your views and add this code before the view is instantiated.
+Now say we didn't want to store TAL views with a 'php' extension. We would like to use 'html' instead. Simply change the extension on your views and change the option in config/kotal.php.
 
-	View::set_tal_ext('html');
+	'ext' => 'html',
 
-As you can see, this is a static method, and it sets a static property inside Kotal_View. It will persist across all TAL views.
+This is a global setting and will affect all views that are generated through KOtal.
 
 Lastly, say if you were in the middle of changing to TAL, and some views had yet been converted. No worries, we can just disable TAL processing on a per-view basis.
 

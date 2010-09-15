@@ -17,11 +17,6 @@ class Kotal_View extends Kohana_View {
 	protected $tal = TRUE;
 
 	/**
-	 * @var  string  file extension for TAL views
-	 */
-	protected static $tal_ext = 'php';
-
-	/**
 	 * Overrides the default method, and processes the view using PHPTAL.
 	 *
 	 * @param   string  filename
@@ -105,7 +100,7 @@ class Kotal_View extends Kohana_View {
 	}
 
 	/**
-	 * Sets the view filename. Overrides extension if set
+	 * Sets the view filename. Overrides extension if set.
 	 *
 	 * @param   string  view filename
 	 * @return  View
@@ -114,7 +109,7 @@ class Kotal_View extends Kohana_View {
 	public function set_filename($file)
 	{
 		// This can fail if the TAL extension is changed and a non-TAL view used
-		if (($path = Kohana::find_file('views', $file, self::$tal_ext)) === FALSE)
+		if (($path = Kohana::find_file('views', $file, Kohana::config('kotal.ext'))) === FALSE)
 		{
 			// Obviously not TAL then, but is it a 'normal' view?
 			if (($path = Kohana::find_file('views', $file)) === FALSE)
@@ -140,16 +135,5 @@ class Kotal_View extends Kohana_View {
 	public function use_tal($tal)
 	{
 		$this->tal = (bool) $tal;
-	}
-
-	/**
-	 * Sets file extension for TAL view files. Default is 'php'.
-	 *
-	 * @param    bool    whether to process using PHPTAL
-	 * @return   void
-	 */
-	public static function set_tal_ext($ext)
-	{
-		self::$tal_ext = (string) $ext;
 	}
 }
