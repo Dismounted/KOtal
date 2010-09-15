@@ -20,9 +20,7 @@ Example
 Firstly, create a new view file called taltest.php and place it under views/.
 
 	<h1 tal:content="title">Sample Title</h1>
-	<div tal:repeat="person people">
-		<p tal:content="person">Name</p>
-	</div>
+	<p tal:repeat="person people" tal:content="person">Name</p>
 
 Then in your controller, add the following code to generate and display your view.
 
