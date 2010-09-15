@@ -60,4 +60,6 @@ Other
 
 KOtal is licensed under the Simplified BSD License. Credits to zombor's KOstache for the initial inspiration and naming idea.
 
+PHPTAL is licensed under the terms of the GNU Lesser General Public License.
+
 For more specific documentation on creating TAL views, see the [PHPTAL Website](http://phptal.org/).
