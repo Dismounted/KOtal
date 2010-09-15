@@ -113,17 +113,16 @@ class Kotal_View extends Kohana_View {
 	 */
 	public function set_filename($file)
 	{
-		if ($this->tal == FALSE)
-		{
-			// No TAL, just process as normal
-			return parent::set_filename($file);
-		}
-
+		// This can fail if the TAL extension is changed and a non-TAL view used
 		if (($path = Kohana::find_file('views', $file, self::$tal_ext)) === FALSE)
 		{
-			throw new Kohana_View_Exception('The requested view :file could not be found', array(
-				':file' => $file,
-			));
+			// Obviously not TAL then, but is it a 'normal' view?
+			if (($path = Kohana::find_file('views', $file)) === FALSE)
+			{
+				throw new Kohana_View_Exception('The requested view :file could not be found', array(
+					':file' => $file,
+				));
+			}
 		}
 
 		// Store the file path locally

@@ -47,7 +47,7 @@ Accessing this action, you should see:
 	Jane
 	Maria
 
-Now say we didn't want to store TAL views with a 'php' extension. We would like to use 'html' instead. Simply change the extension on your views and add this code anytime before the view is rendered.
+Now say we didn't want to store TAL views with a 'php' extension. We would like to use 'html' instead. Simply change the extension on your views and add this code before the view is instantiated.
 
 	View::set_tal_ext('html');
 
