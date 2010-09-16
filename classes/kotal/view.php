@@ -42,7 +42,7 @@ class Kotal_View extends Kohana_View {
 			// Import the global view variables to TAL namespace and maintain references
 			foreach (View::$_global_data AS $name => $value)
 			{
-				$template->{$name} = $value;
+				$template->{$name} =& $value;
 			}
 		}
 
