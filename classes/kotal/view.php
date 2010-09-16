@@ -164,7 +164,7 @@ class Kotal_View extends Kohana_View {
 	 *
 	 * Current options are: PHPTAL::XML, PHPTAL::XHTML or PHPTAL::HTML5.
 	 *
-	 * @param    int    output mode to use for this view.
+	 * @param    int    output mode to use for this view
 	 * @return   View
 	 */
 	public function set_output_mode($mode)
@@ -177,6 +177,28 @@ class Kotal_View extends Kohana_View {
 
 		// Set output mode (exception will be thrown on error)
 		$this->tal->setOutputMode($mode);
+
+		return $this;
+	}
+
+	/**
+	 * Sets PHPTAL input/output encoding. Defaults to UTF-8. Case-insensitive.
+	 *
+	 * Save yourself the trouble and leave everything in UTF-8.
+	 *
+	 * @param    string    encoding name
+	 * @return   View
+	 */
+	public function set_encoding($enc)
+	{
+		if (empty($this->tal))
+		{
+			// Create PHPTAL object for this setting to take effect
+			$this->tal = new PHPTAL($this->_file);
+		}
+
+		// Set encoding
+		$this->tal->setEncoding($enc);
 
 		return $this;
 	}
