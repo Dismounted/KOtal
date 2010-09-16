@@ -12,6 +12,11 @@
 class Kotal_View extends Kohana_View {
 
 	/**
+	 * @var   PHPTAL   the working object
+	 */
+	protected $tal = NULL;
+
+	/**
 	 * @var   bool   enable tal on this view
 	 */
 	protected $tal_enable = TRUE;
@@ -39,15 +44,18 @@ class Kotal_View extends Kohana_View {
 	 * @param   array   variables
 	 * @return  string
 	 */
-	protected static function capture($kohana_view_filename, array $kohana_view_data)
+	protected static function capture($kohana_view_filename, array $kohana_view_data, PHPTAL $tal = NULL)
 	{
-		// Create TAL object
-		$template = new PHPTAL($kohana_view_filename);
+		// Create TAL object if it isn't given to us
+		if (empty($tal))
+		{
+			$tal = new PHPTAL($kohana_view_filename);
+		}
 
 		// Import the view variables to TAL namespace
 		foreach ($kohana_view_data AS $name => $value)
 		{
-			$template->{$name} = $value;
+			$tal->{$name} = $value;
 		}
 
 		if (View::$_global_data)
@@ -55,7 +63,7 @@ class Kotal_View extends Kohana_View {
 			// Import the global view variables to TAL namespace and maintain references
 			foreach (View::$_global_data AS $name => $value)
 			{
-				$template->{$name} =& $value;
+				$tal->{$name} =& $value;
 			}
 		}
 
@@ -65,7 +73,7 @@ class Kotal_View extends Kohana_View {
 		try
 		{
 			// Execute template
-			echo $template->execute();
+			echo $tal->execute();
 		}
 		catch (Exception $e)
 		{
@@ -108,7 +116,7 @@ class Kotal_View extends Kohana_View {
 		else
 		{
 			// Combine local and global data and capture the output
-			return View::capture($this->_file, $this->_data);
+			return View::capture($this->_file, $this->_data, $this->tal);
 		}
 	}
 
