@@ -17,6 +17,22 @@ class Kotal_View extends Kohana_View {
 	protected $tal_enable = TRUE;
 
 	/**
+	 * Overrides default constructor to also include the PHPTAL library.
+	 *
+	 * @param   string  view filename
+	 * @param   array   array of values
+	 * @return  void
+	 * @uses    View::set_filename
+	 */
+	public function __construct($file = NULL, array $data = NULL)
+	{
+		parent::__construct($file, $data);
+
+		// Doing this now so we can access its constants
+		require_once Kohana::find_file('vendor', 'phptal/PHPTAL');
+	}
+
+	/**
 	 * Overrides the default method, and processes the view using PHPTAL.
 	 *
 	 * @param   string  filename
@@ -25,9 +41,6 @@ class Kotal_View extends Kohana_View {
 	 */
 	protected static function capture($kohana_view_filename, array $kohana_view_data)
 	{
-		// Include PHPTAL if not already done so
-		require_once Kohana::find_file('vendor', 'phptal/PHPTAL');
-
 		// Create TAL object
 		$template = new PHPTAL($kohana_view_filename);
 
