@@ -3,7 +3,7 @@
 return array(
 
 	/**
-	 * The file extension used for TAL view files.
+	 * The file extension used for TAL view files. Default is 'php'.
 	 */
 	'ext' => 'php',
 
