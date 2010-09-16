@@ -12,7 +12,7 @@
 class Kotal_View extends Kohana_View {
 
 	/**
-	 * @var   PHPTAL   the working object
+	 * @var   PHPTAL   working object, will be generated automatically when needed
 	 */
 	protected $tal = NULL;
 
@@ -44,7 +44,7 @@ class Kotal_View extends Kohana_View {
 	 * @param   array   variables
 	 * @return  string
 	 */
-	protected static function capture($kohana_view_filename, array $kohana_view_data, PHPTAL $tal = NULL)
+	protected static function capture($kohana_view_filename, array $kohana_view_data, PHPTAL &$tal = NULL)
 	{
 		// Create TAL object if it isn't given to us
 		if (empty($tal))
@@ -156,5 +156,25 @@ class Kotal_View extends Kohana_View {
 	public function use_tal($tal)
 	{
 		$this->tal_enable = (bool) $tal;
+	}
+
+	/**
+	 * Sets PHPTAL output mode. Defaults to PHPTAL::XHTML.
+	 *
+	 * Current options are: PHPTAL::XML, PHPTAL::XHTML or PHPTAL::HTML5.
+	 *
+	 * @param    int    output mode to use for this view.
+	 * @return   void
+	 */
+	public function set_output_mode($mode)
+	{
+		if (empty($this->tal))
+		{
+			// Create PHPTAL object for this setting to take effect
+			$this->tal = new PHPTAL($this->_file);
+		}
+
+		// Set output mode (exception will be thrown on error)
+		$this->tal->setOutputMode($mode);
 	}
 }
