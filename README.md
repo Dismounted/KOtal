@@ -51,9 +51,33 @@ Now say we didn't want to store TAL views with a 'php' extension. We would like 
 
 This is a global setting and will affect all views that are generated through KOtal.
 
-Lastly, say if you were in the middle of changing to TAL, and some views had yet been converted. No worries, we can just disable TAL processing on a per-view basis.
+Next, we would like to change how PHPTAL outputs out documents. Easy. There are two relevant methods.
+
+	$view->set_output_mode(PHPTAL::XHTML)
+	     ->set_encoding('utf-8');
+
+These are the default settings, see the PHPTAL documentation for available options.
+
+Say if you were in the middle of changing to TAL, and some views had yet been converted. No worries, we can just disable TAL processing on a per-view basis.
 
 	$view->use_tal(FALSE);
+
+Lastly, other features that appear in Kohana's default handler should work in KOtal, such as method chaining and setting the view file path just before rendering. Thus, our final example code could be:
+
+	$this->request->response = View::factory()
+		->set_output_mode(PHPTAL::XHTML)
+		->set_encoding('utf-8')
+		->set(array(
+			'people' => array(
+				'Alan',
+				'Bob',
+				'Jane',
+				'Maria'
+			),
+			'title' => 'People'
+		))
+		->set_filename('taltest')
+		->render();
 
 Other
 ----
