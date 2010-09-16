@@ -8,13 +8,13 @@
  * @copyright  (c) 2010 Hanson Wong
  * @license    http://github.com/Dismounted/KOtal/blob/master/LICENSE
  */
- 
+
 class Kotal_View extends Kohana_View {
 
 	/**
-	 * @var  bool  enable tal on this view
+	 * @var   bool   enable tal on this view
 	 */
-	protected $tal = TRUE;
+	protected $tal_enable = TRUE;
 
 	/**
 	 * Overrides the default method, and processes the view using PHPTAL.
@@ -87,7 +87,7 @@ class Kotal_View extends Kohana_View {
 			throw new Kohana_View_Exception('You must set the file to use within your view before rendering');
 		}
 
-		if ($this->tal === FALSE)
+		if ($this->tal_enable === FALSE)
 		{
 			// No TAL, just process as normal
 			return parent::capture($this->_file, $this->_data);
@@ -134,6 +134,6 @@ class Kotal_View extends Kohana_View {
 	 */
 	public function use_tal($tal)
 	{
-		$this->tal = (bool) $tal;
+		$this->tal_enable = (bool) $tal;
 	}
 }
