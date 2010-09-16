@@ -42,6 +42,7 @@ class Kotal_View extends Kohana_View {
 	 *
 	 * @param   string  filename
 	 * @param   array   variables
+	 * @param   PHPTAL  TAL working object
 	 * @return  string
 	 */
 	protected static function capture($kohana_view_filename, array $kohana_view_data, PHPTAL &$tal = NULL)
