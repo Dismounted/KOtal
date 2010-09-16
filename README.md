@@ -58,7 +58,7 @@ Lastly, say if you were in the middle of changing to TAL, and some views had yet
 Other
 ----
 
-KOtal is licensed under the Simplified BSD License. Credits to zombor's KOstache for the initial inspiration and naming idea.
+KOtal is licensed under the New BSD License. Credits to zombor's KOstache for the initial inspiration and naming idea.
 
 PHPTAL is licensed under the terms of the GNU Lesser General Public License.
 
