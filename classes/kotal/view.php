@@ -151,11 +151,12 @@ class Kotal_View extends Kohana_View {
 	 * Sets whether PHPTAL should be used on this view. Default is TRUE.
 	 *
 	 * @param    bool    whether to process using PHPTAL
-	 * @return   void
+	 * @return   View
 	 */
 	public function use_tal($tal)
 	{
 		$this->tal_enable = (bool) $tal;
+		return $this;
 	}
 
 	/**
@@ -164,7 +165,7 @@ class Kotal_View extends Kohana_View {
 	 * Current options are: PHPTAL::XML, PHPTAL::XHTML or PHPTAL::HTML5.
 	 *
 	 * @param    int    output mode to use for this view.
-	 * @return   void
+	 * @return   View
 	 */
 	public function set_output_mode($mode)
 	{
@@ -176,5 +177,7 @@ class Kotal_View extends Kohana_View {
 
 		// Set output mode (exception will be thrown on error)
 		$this->tal->setOutputMode($mode);
+
+		return $this;
 	}
 }
