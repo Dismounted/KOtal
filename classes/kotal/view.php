@@ -87,7 +87,7 @@ class Kotal_View extends Kohana_View {
 			throw new Kohana_View_Exception('You must set the file to use within your view before rendering');
 		}
 
-		if ($this->tal == FALSE)
+		if ($this->tal === FALSE)
 		{
 			// No TAL, just process as normal
 			return parent::capture($this->_file, $this->_data);
@@ -95,7 +95,7 @@ class Kotal_View extends Kohana_View {
 		else
 		{
 			// Combine local and global data and capture the output
-			return self::capture($this->_file, $this->_data);
+			return View::capture($this->_file, $this->_data);
 		}
 	}
 
