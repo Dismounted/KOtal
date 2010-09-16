@@ -64,7 +64,7 @@ Say if you were in the middle of changing to TAL, and some views had yet been co
 
 Lastly, other features that appear in Kohana's default handler should work in KOtal, such as method chaining and setting the view file path just before rendering. Thus, our final example code could be:
 
-	$this->request->response = View::factory()
+	$view = View::factory()
 		->set_output_mode(PHPTAL::XHTML)
 		->set_encoding('utf-8')
 		->set(array(
@@ -76,8 +76,8 @@ Lastly, other features that appear in Kohana's default handler should work in KO
 			),
 			'title' => 'People'
 		))
-		->set_filename('taltest')
-		->render();
+		->set_filename('taltest');
+	$this->request->response = $view->render();
 
 Other
 ----
