@@ -49,8 +49,11 @@ class Kotal_View extends Kohana_View {
 		// Create TAL object if it isn't given to us
 		if (empty($tal))
 		{
-			$tal = new PHPTAL($kohana_view_filename);
+			$tal = new PHPTAL();
 		}
+
+		// Set TAL template file path
+		$tal->setTemplate($kohana_view_filename);
 
 		// Import the view variables to TAL namespace
 		foreach ($kohana_view_data AS $name => $value)
@@ -172,7 +175,7 @@ class Kotal_View extends Kohana_View {
 		if (empty($this->tal))
 		{
 			// Create PHPTAL object for this setting to take effect
-			$this->tal = new PHPTAL($this->_file);
+			$this->tal = new PHPTAL();
 		}
 
 		// Set output mode (exception will be thrown on error)
@@ -194,7 +197,7 @@ class Kotal_View extends Kohana_View {
 		if (empty($this->tal))
 		{
 			// Create PHPTAL object for this setting to take effect
-			$this->tal = new PHPTAL($this->_file);
+			$this->tal = new PHPTAL();
 		}
 
 		// Set encoding
