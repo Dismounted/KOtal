@@ -28,10 +28,10 @@ class Kotal_View extends Kohana_View {
 		// Include PHPTAL if not already done so
 		require_once Kohana::find_file('vendor', 'phptal/PHPTAL');
 
-		// Create template object
+		// Create TAL object
 		$template = new PHPTAL($kohana_view_filename);
 
-		// Import the view variables to local namespace
+		// Import the view variables to TAL namespace
 		foreach ($kohana_view_data AS $name => $value)
 		{
 			$template->{$name} = $value;
@@ -39,7 +39,7 @@ class Kotal_View extends Kohana_View {
 
 		if (View::$_global_data)
 		{
-			// Import the global view variables to local namespace and maintain references
+			// Import the global view variables to TAL namespace and maintain references
 			foreach (View::$_global_data AS $name => $value)
 			{
 				$template->{$name} = $value;
