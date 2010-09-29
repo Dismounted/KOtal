@@ -154,11 +154,19 @@ class Kotal_View extends Kohana_View {
 	/**
 	 * Sets whether PHPTAL should be used on this view. Default is TRUE.
 	 *
+	 * If no arguments are set, this method returns $tal_enable.
+	 *
 	 * @param    bool    whether to process using PHPTAL
 	 * @return   View
+	 * @return   bool
 	 */
-	public function use_tal($tal)
+	public function use_tal($tal = NULL)
 	{
+		if ($tal === NULL)
+		{
+			return $this->tal_enable;
+		}
+
 		$this->tal_enable = (bool) $tal;
 		return $this;
 	}
