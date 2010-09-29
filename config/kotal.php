@@ -7,4 +7,14 @@ return array(
 	 */
 	'ext' => 'php',
 
+	/**
+	 * List of controllers automatically excluded from TAL processing.
+	 * Should be taken from the 'controller' parameter in routes.
+	 */
+	'exclude' => array(
+		'codebench',
+		'unittest',
+		'userguide',
+	),
+
 );

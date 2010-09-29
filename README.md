@@ -79,6 +79,23 @@ Lastly, other features that appear in Kohana's default handler should work in KO
 		->set_filename('taltest');
 	$this->request->response = $view->render();
 
+Caveats
+----
+
+As KOtal overrides the default Kohana view handler, modules that use "normal" views will fail initially. You can fix this by using the controller exclude list inside config/kotal.php. Simply drop in the controller's name (as defined inside routes).
+
+	'exclude' => array(
+		'codebench',
+		'unittest',
+		'userguide',
+	),
+
+Modules that ship with Kohana 3 by default will already be covered in the default KOtal configuration. The only exception is the pagination module. If you would like to use this module with its supplied views, create a view before rendering like so:
+
+	$view = View::factory(Kohana::config('pagination.default.view'));
+	$view->use_tal(FALSE);
+	$pagination->render($view);
+
 Other
 ----
 

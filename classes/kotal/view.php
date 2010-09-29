@@ -22,6 +22,11 @@ class Kotal_View extends Kohana_View {
 	protected $tal_enable = TRUE;
 
 	/**
+	 * @var   array   cached list of excluded controllers
+	 */
+	protected static $tal_exclude = NULL;
+
+	/**
 	 * Overrides default constructor to also include the PHPTAL library.
 	 *
 	 * @param   string  view filename
@@ -99,6 +104,7 @@ class Kotal_View extends Kohana_View {
 	 * @return   string
 	 * @throws   Kohana_View_Exception
 	 * @uses     View::capture
+	 * @uses     View::check_tal_exclusions
 	 */
 	public function render($file = NULL)
 	{
@@ -112,7 +118,7 @@ class Kotal_View extends Kohana_View {
 			throw new Kohana_View_Exception('You must set the file to use within your view before rendering');
 		}
 
-		if ($this->tal_enable === FALSE)
+		if ($this->check_tal_exclusions() === FALSE)
 		{
 			// No TAL, just process as normal
 			return parent::capture($this->_file, $this->_data);
@@ -213,5 +219,33 @@ class Kotal_View extends Kohana_View {
 		$this->tal->setEncoding($enc);
 
 		return $this;
+	}
+
+	/**
+	 * Check TAL exclusions set in config against current request. Mainly for
+	 * modules that use normal views (e.g. userguide).
+	 *
+	 * @param    bool   clear the cache and check again if TRUE
+	 * @return   bool   to use or not to use TAL, result from View::use_tal()
+	 * @uses     View::use_tal
+	 */
+	protected function check_tal_exclusions($clear = FALSE)
+	{
+		// fetch current controller
+		$controller = UTF8::strtolower(Request::current()->controller);
+
+		// cache exclusion list if it doesn't exist (saves calling strtolower)
+		if ($clear == TRUE OR self::$tal_exclude === NULL)
+		{
+			self::$tal_exclude = Arr::map('UTF8::strtolower', Kohana::config('kotal.exclude'));
+		}
+
+		// check if this request should be excluded
+		if (in_array($controller, self::$tal_exclude))
+		{
+			$this->use_tal(FALSE);
+		}
+
+		return $this->use_tal();
 	}
 }
