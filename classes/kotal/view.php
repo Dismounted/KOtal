@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Replaces the current Kohana view wrapper and processes view data via PHPTAL.
  *
@@ -14,7 +14,7 @@ class Kotal_View extends Kohana_View {
 	/**
 	 * @var   PHPTAL   working object, will be generated automatically when needed
 	 */
-	protected $tal = NULL;
+	protected $tal;
 
 	/**
 	 * @var   bool   enable tal on this view
@@ -24,7 +24,7 @@ class Kotal_View extends Kohana_View {
 	/**
 	 * @var   array   cached list of excluded controllers
 	 */
-	protected static $tal_exclude = NULL;
+	protected static $tal_exclude;
 
 	/**
 	 * Overrides default constructor to also include the PHPTAL library.
