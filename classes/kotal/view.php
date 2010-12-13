@@ -51,7 +51,7 @@ class Kotal_View extends Kohana_View {
 	 *
 	 * @return string
 	 */
-	protected static function capture($kohana_view_filename, array $kohana_view_data, PHPTAL &$tal = NULL)
+	protected static function _capture($kohana_view_filename, array $kohana_view_data, PHPTAL &$tal = NULL)
 	{
 		// Create TAL object if it isn't given to us
 		if ($tal === NULL)
@@ -125,15 +125,15 @@ class Kotal_View extends Kohana_View {
 			throw new Kohana_View_Exception('You must set the file to use within your view before rendering.');
 		}
 
-		if ($this->check_tal_exclusions() === FALSE)
+		if ($this->_check_tal_exclusions() === FALSE)
 		{
 			// No TAL, just process as normal
-			return parent::capture($this->_file, $this->_data);
+			return parent::_capture($this->_file, $this->_data);
 		}
 		else
 		{
 			// Combine local and global data and capture the output
-			return self::capture($this->_file, $this->_data, $this->_tal);
+			return self::_capture($this->_file, $this->_data, $this->_tal);
 		}
 	}
 
@@ -241,7 +241,7 @@ class Kotal_View extends Kohana_View {
 	 *
 	 * @return bool Whether to use TAL, result from $this->use_tal()
 	 */
-	protected function check_tal_exclusions($clear = FALSE)
+	protected function _check_tal_exclusions($clear = FALSE)
 	{
 		// Fetch current controller
 		$controller = UTF8::strtolower(Request::current()->controller);
