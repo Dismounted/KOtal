@@ -15,31 +15,31 @@ require_once Kohana::find_file('vendor', 'phptal/PHPTAL/TranslationService');
 class Kotal_TranslationService implements PHPTAL_TranslationService {
 
 	/**
-	 * @var   array   replace all key with values in translated strings
+	 * @var array Replace all key with values in translated strings
 	 */
-	protected $vars = array();
+	protected $_vars = array();
 
 	/**
 	 * Set an interpolation var.
 	 *
-	 * @param   string  key
-	 * @param   string  value
+	 * @param string
+	 * @param string
 	 */
 	public function setVar($key, $value)
 	{
-		$this->vars[':'.$key] = $value;
+		$this->_vars[':'.$key] = $value;
 	}
 
 	/**
 	 * Translate given key.
 	 *
-	 * @param   string  key to translate
-	 * @param   bool    if true, output will be HTML-escaped
+	 * @param string Key to translate
+	 * @param bool If true, output will be HTML-escaped
 	 */
 	public function translate($key, $htmlescape = true)
 	{
 		// Replace ${key} with :key and run through the translator
-		$text = __(preg_replace('/\$\{(.+?)\}/', ':$1', $key), $this->vars);
+		$text = __(preg_replace('/\$\{(.+?)\}/', ':$1', $key), $this->_vars);
 
 		// If comment is removed, you'll only be able to use <tal:block> for
 		// i18n:name attributes.

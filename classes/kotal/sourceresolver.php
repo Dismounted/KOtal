@@ -17,12 +17,14 @@ class Kotal_SourceResolver implements PHPTAL_SourceResolver {
 	/**
 	 * Resolves files according to Kohana conventions.
 	 *
-	 * @param   string  path to resolve
-	 * @return  PHPTAL_Source
+	 * @param string Path to resolve
+	 *
+	 * @return PHPTAL_FileSource
+	 * @return null
 	 */
 	public function resolve($path)
 	{
-		$path = str_replace(array(APPPATH.'views/', '.php'), array('', ''), $path);
+		$path = str_replace(array(APPPATH.'views/', '.php'), '', $path);
 		$file = Kohana::find_file('views', $path);
 
 		if ($file)
