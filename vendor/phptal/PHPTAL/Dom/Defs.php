@@ -9,16 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Defs.php 677 2009-07-20 11:58:26Z kornel $
+ * @version  SVN: $Id: Defs.php 958 2010-06-27 22:47:38Z kornel $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Namespace.php';
-require_once 'PHPTAL/Namespace/Builtin.php';
-require_once 'PHPTAL/Namespace/TAL.php';
-require_once 'PHPTAL/Namespace/METAL.php';
-require_once 'PHPTAL/Namespace/I18N.php';
-require_once 'PHPTAL/Namespace/PHPTAL.php';
 
 /**
  * PHPTAL constants.
@@ -45,7 +39,7 @@ class PHPTAL_Dom_Defs
         }
         return self::$_instance;
     }
-    
+
     protected function __construct()
     {
         $this->registerNamespace(new PHPTAL_Namespace_TAL());
@@ -57,8 +51,9 @@ class PHPTAL_Dom_Defs
     /**
      * true if it's empty in XHTML (e.g. <img/>)
      * it will assume elements with no namespace may be XHTML too.
-     * 
+     *
      * @param string $tagName local name of the tag
+     *
      * @return bool
      */
     public function isEmptyTagNS($namespace_uri, $local_name)
@@ -88,6 +83,7 @@ class PHPTAL_Dom_Defs
      * Returns true if the attribute is an xhtml boolean attribute.
      *
      * @param string $att local name
+     *
      * @return bool
      */
     public function isBooleanAttribute($att)
@@ -167,8 +163,14 @@ class PHPTAL_Dom_Defs
 
     private static $_instance = null;
     private $_dictionary = array();
+    /**
+     * list of PHPTAL_Namespace objects
+     */
     private $namespaces_by_uri = array();
-    private $prefix_to_uri = array();
+    private $prefix_to_uri = array(
+        'xml'=>'http://www.w3.org/XML/1998/namespace',
+        'xmlns'=>'http://www.w3.org/2000/xmlns/',
+    );
 
     /**
      * This array contains XHTML tags that must be echoed in a &lt;tag/&gt; form

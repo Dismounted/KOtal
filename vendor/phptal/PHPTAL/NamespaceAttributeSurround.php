@@ -7,23 +7,17 @@
  * @category HTML
  * @package  PHPTAL
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Trigger.php 805 2009-12-06 01:24:28Z kornel $
+ * @version  SVN: $Id: NamespaceAttributeSurround.php 887 2010-06-07 09:45:35Z kornel $
  * @link     http://phptal.org/
  */
 
-
 /**
- * Interface for Triggers (phptal:id)
- *
+ * This type of attribute wraps element
  * @package PHPTAL
+ * @subpackage Namespace
  */
-interface PHPTAL_Trigger
+class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
 {
-    const SKIPTAG = 1;
-    const PROCEED = 2;
-
-    public function start($id, $tpl);
-
-    public function end($id, $tpl);
 }

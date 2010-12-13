@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: TalesRegistry.php 610 2009-05-24 00:32:13Z kornel $
+ * @version  SVN: $Id: TalesRegistry.php 865 2010-05-25 22:16:24Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -38,11 +38,12 @@ class PHPTAL_TalesRegistry
     }
 
     protected function __construct()
-    {       
+    {
         $this->registerPrefix('not', array('PHPTAL_Php_TalesInternal', 'not'));
         $this->registerPrefix('path', array('PHPTAL_Php_TalesInternal', 'path'));
         $this->registerPrefix('string', array('PHPTAL_Php_TalesInternal', 'string'));
         $this->registerPrefix('php', array('PHPTAL_Php_TalesInternal', 'php'));
+        $this->registerPrefix('phptal-internal-php-block', array('PHPTAL_Php_TalesInternal', 'phptal_internal_php_block'));
         $this->registerPrefix('exists', array('PHPTAL_Php_TalesInternal', 'exists'));
         $this->registerPrefix('number', array('PHPTAL_Php_TalesInternal', 'number'));
         $this->registerPrefix('true', array('PHPTAL_Php_TalesInternal', 'true'));

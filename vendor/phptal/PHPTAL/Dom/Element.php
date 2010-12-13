@@ -9,12 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Element.php 774 2009-10-26 01:27:45Z kornel $
+ * @version  SVN: $Id: Element.php 921 2010-06-20 21:26:13Z kornel $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Dom/Defs.php';
-require_once 'PHPTAL/Dom/Attr.php';
 
 /**
  * For backwards compatibility only. Do not use!
@@ -60,8 +58,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         $this->xmlns = $xmlns;
 
         // implements inheritance of element's namespace to tal attributes (<metal: use-macro>)
-        foreach($attribute_nodes as $index => $attr)
-        {
+        foreach ($attribute_nodes as $index => $attr) {
             // it'll work only when qname == localname, which is good
             if ($this->xmlns->isValidAttributeNS($namespace_uri, $attr->getQualifiedName())) {
                 $this->attribute_nodes[$index] = new PHPTAL_Dom_Attr($attr->getQualifiedName(), $namespace_uri, $attr->getValueEscaped(), $attr->getEncoding());
@@ -103,10 +100,9 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
         $valueEscaped = ''; // sometimes parser generates split text nodes. "normalisation" is needed.
         $value = '';
-        foreach($this->childNodes as $node)
-        {
+        foreach ($this->childNodes as $node) {
             // leave it alone if there is CDATA, comment, or anything else.
-            if (!$node instanceOf PHPTAL_Dom_Text) return;
+            if (!$node instanceof PHPTAL_Dom_Text) return;
 
             $value .= $node->getValue();
             $valueEscaped .= $node->getValueEscaped();
@@ -116,7 +112,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
         // only add cdata if there are entities
         // and there's no ${structure} (because it may rely on cdata syntax)
-        if (false === strpos($valueEscaped,'&') || preg_match('/<\?|\${structure/', $value)) {
+        if (false === strpos($valueEscaped, '&') || preg_match('/<\?|\${structure/', $value)) {
             return;
         }
 
@@ -133,12 +129,12 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
      */
     private function replacePHPAttributes()
     {
-        foreach($this->attribute_nodes as $attr) {
-            $split = preg_split("/<\?(php|=|)(.*?)\?>/", $attr->getValueEscaped(), NULL, PREG_SPLIT_DELIM_CAPTURE);
+        foreach ($this->attribute_nodes as $attr) {
+            $split = preg_split("/<\?(php|=|)(.*?)\?>/", $attr->getValueEscaped(), null, PREG_SPLIT_DELIM_CAPTURE);
             if (count($split)==1) continue;
 
             $new_value = '';
-            for($i=0; $i < count($split); $i += 3) {
+            for ($i=0; $i < count($split); $i += 3) {
                 if (strlen($split[$i])) {
                     $new_value .= 'echo \''.str_replace('\'', '\\\'', $split[$i]).'\';';
                 }
@@ -158,28 +154,28 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         $child->parentNode = $this;
         $this->childNodes[] = $child;
     }
-    
+
     public function removeChild(PHPTAL_Dom_Node $child)
     {
-        foreach($this->childNodes as $k => $node) {
+        foreach ($this->childNodes as $k => $node) {
             if ($child === $node) {
                 $child->parentNode = null;
-                array_splice($this->childNodes,$k,1);
+                array_splice($this->childNodes, $k, 1);
                 return;
             }
         }
         throw new PHPTAL_Exception("Given node is not child of ".$this->getQualifiedName());
     }
-    
+
     public function replaceChild(PHPTAL_Dom_Node $newElement, PHPTAL_Dom_Node $oldElement)
     {
-        foreach($this->childNodes as $k => $node) {
+        foreach ($this->childNodes as $k => $node) {
             if ($node === $oldElement) {
                 $oldElement->parentNode = NULL;
-                
-                if ($newElement->parentNode) $newElement->parentNode->removeChild($child);                
+
+                if ($newElement->parentNode) $newElement->parentNode->removeChild($child);
                 $newElement->parentNode = $this;
-                
+
                 $this->childNodes[$k] = $newElement;
                 return;
             }
@@ -203,15 +199,14 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
             /// code generation
 
-            if ($codewriter->isDebugOn()) {
-                $codewriter->doSetVar('$ctx->_line',$this->getSourceLine());
+            if ($this->getSourceLine()) {
                 $codewriter->doComment('tag "'.$this->qualifiedName.'" from line '.$this->getSourceLine());
             }
 
             $this->generateSurroundHead($codewriter);
 
             if (count($this->replaceAttributes)) {
-                foreach($this->replaceAttributes as $att) {
+                foreach ($this->replaceAttributes as $att) {
                     $att->before($codewriter);
                     $att->after($codewriter);
                 }
@@ -221,11 +216,10 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
                 $this->generateContent($codewriter);
                 $this->generateFoot($codewriter);
             }
-            
+
             $this->generateSurroundFoot($codewriter);
         }
-        catch(PHPTAL_TemplateException $e)
-        {
+        catch(PHPTAL_TemplateException $e) {
             $e->hintSrcPosition($this->getSourceFile(), $this->getSourceLine());
             throw $e;
         }
@@ -233,17 +227,17 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     /**
      * Array with PHPTAL_Dom_Attr objects
-     * 
+     *
      * @return array
      */
     public function getAttributeNodes()
     {
         return $this->attribute_nodes;
     }
-    
+
     /**
      * Replace all attributes
-     * 
+     *
      * @param array $nodes array of PHPTAL_Dom_Attr objects
      */
     public function setAttributeNodes(array $nodes)
@@ -260,28 +254,43 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     public function hasAttributeNS($ns_uri, $localname)
     {
-        return NULL !== $this->getAttributeNodeNS($ns_uri, $localname);
+        return null !== $this->getAttributeNodeNS($ns_uri, $localname);
     }
 
     public function getAttributeNodeNS($ns_uri, $localname)
     {
-        foreach($this->attribute_nodes as $attr) {
+        foreach ($this->attribute_nodes as $attr) {
             if ($attr->getNamespaceURI() === $ns_uri && $attr->getLocalName() === $localname) return $attr;
         }
-        return NULL;
+        return null;
+    }
+
+    public function removeAttributeNS($ns_uri, $localname)
+    {
+        foreach ($this->attribute_nodes as $k => $attr) {
+            if ($attr->getNamespaceURI() === $ns_uri && $attr->getLocalName() === $localname) {
+                unset($this->attribute_nodes[$k]);
+                return;
+            }
+        }
     }
 
     public function getAttributeNode($qname)
     {
         foreach($this->attribute_nodes as $attr) if ($attr->getQualifiedName() === $qname) return $attr;
-        return NULL;
+        return null;
     }
 
+    /**
+     * If possible, use getAttributeNodeNS and setAttributeNS.
+     *
+     * NB: This method doesn't handle namespaces properly.
+     */
     public function getOrCreateAttributeNode($qname)
     {
         if ($attr = $this->getAttributeNode($qname)) return $attr;
 
-        $attr = new PHPTAL_Dom_Attr($qname, "", NULL, 'UTF-8'); // FIXME: should find namespace and encoding
+        $attr = new PHPTAL_Dom_Attr($qname, "", null, 'UTF-8'); // FIXME: should find namespace and encoding
         $this->attribute_nodes[] = $attr;
         return $attr;
     }
@@ -296,17 +305,35 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     }
 
     /**
+     * Set attribute value. Creates new attribute if it doesn't exist yet.
+     *
+     * @param string $namespace_uri full namespace URI. "" for default namespace
+     * @param string $qname prefixed qualified name (e.g. "atom:feed") or local name (e.g. "p")
+     * @param string $value unescaped value
+     *
+     * @return void
+     */
+    public function setAttributeNS($namespace_uri, $qname, $value)
+    {
+        $localname = preg_replace('/^[^:]*:/', '', $qname);
+        if (!($n = $this->getAttributeNodeNS($namespace_uri, $localname))) {
+            $this->attribute_nodes[] = $n = new PHPTAL_Dom_Attr($qname, $namespace_uri, null, 'UTF-8'); // FIXME: find encoding
+        }
+        $n->setValue($value);
+    }
+
+    /**
      * Returns true if this element or one of its PHPTAL attributes has some
      * content to print (an empty text node child does not count).
-     * 
+     *
      * @return bool
      */
     public function hasRealContent()
     {
         if (count($this->contentAttributes) > 0) return true;
-        
-        foreach($this->childNodes as $node) {
-            if (!$node instanceOf PHPTAL_Dom_Text || $node->getValueEscaped() !== '') return true;
+
+        foreach ($this->childNodes as $node) {
+            if (!$node instanceof PHPTAL_Dom_Text || $node->getValueEscaped() !== '') return true;
         }
         return false;
     }
@@ -314,7 +341,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     public function hasRealAttributes()
     {
         if ($this->hasAttributeNS('http://xml.zope.org/namespaces/tal', 'attributes')) return true;
-        foreach($this->attribute_nodes as $attr) {
+        foreach ($this->attribute_nodes as $attr) {
             if ($attr->getReplacedState() !== PHPTAL_Dom_Attr::HIDDEN) return true;
         }
         return false;
@@ -324,7 +351,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     public function generateSurroundHead(PHPTAL_Php_CodeWriter $codewriter)
     {
-        foreach($this->surroundAttributes as $att) {
+        foreach ($this->surroundAttributes as $att) {
             $att->before($codewriter);
         }
     }
@@ -343,13 +370,12 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         } else {
             $codewriter->pushHTML('<'.$this->qualifiedName);
         }
-        
+
         $this->generateAttributes($codewriter);
 
         if (!$html5mode && $this->isEmptyNode($codewriter->getOutputMode())) {
             $codewriter->pushHTML('/>');
-        }
-        else {
+        } else {
             $codewriter->pushHTML('>');
         }
 
@@ -358,10 +384,10 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         }
     }
 
-    public function generateContent(PHPTAL_Php_CodeWriter $codewriter = NULL, $realContent=false)
+    public function generateContent(PHPTAL_Php_CodeWriter $codewriter = null, $realContent=false)
     {
         // For backwards compatibility only!
-        if ($codewriter===NULL) $codewriter = self::$_codewriter_bc_hack_; // FIXME!
+        if ($codewriter===null) $codewriter = self::$_codewriter_bc_hack_; // FIXME!
 
         if (!$this->isEmptyNode($codewriter->getOutputMode())) {
             if ($realContent || !count($this->contentAttributes)) {
@@ -392,7 +418,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         } else {
             $codewriter->pushHTML('</'.$this->getQualifiedName().'>');
         }
-        
+
         if ($this->footPrintCondition) {
             $codewriter->doEnd('if');
         }
@@ -410,14 +436,14 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     private function generateAttributes(PHPTAL_Php_CodeWriter $codewriter)
     {
         $html5mode = ($codewriter->getOutputMode() === PHPTAL::HTML5);
-        
-        foreach($this->getAttributeNodes() as $attr) {
-            
+
+        foreach ($this->getAttributeNodes() as $attr) {
+
             // xmlns:foo is not allowed in text/html
             if ($html5mode && $attr->isNamespaceDeclaration()) {
                 continue;
             }
-            
+
             switch ($attr->getReplacedState()) {
                 case PHPTAL_Dom_Attr::NOT_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName());
@@ -458,16 +484,14 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     private function separateAttributes()
     {
         $talAttributes = array();
-        foreach($this->attribute_nodes as $index => $attr) {
+        foreach ($this->attribute_nodes as $index => $attr) {
             // remove handled xml namespaces
             if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($attr->getQualifiedName(), $attr->getValueEscaped())) {
                 unset($this->attribute_nodes[$index]);
-            }
-            else if ($this->xmlns->isHandledNamespace($attr->getNamespaceURI())) {
+            } else if ($this->xmlns->isHandledNamespace($attr->getNamespaceURI())) {
                 $talAttributes[$attr->getQualifiedName()] = $attr;
                 $attr->hide();
-            }
-            else if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
+            } else if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
                 $attr->setValue($attr->getLocalName());
             }
         }
@@ -477,7 +501,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     private function orderTalAttributes(array $talAttributes)
     {
         $temp = array();
-        foreach($talAttributes as $key => $domattr) {
+        foreach ($talAttributes as $key => $domattr) {
             $nsattr = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($domattr->getNamespaceURI(), $domattr->getLocalName());
             if (array_key_exists($nsattr->getPriority(), $temp)) {
                 throw new PHPTAL_TemplateException(sprintf("Attribute conflict in < %s > '%s' cannot appear with '%s'",
@@ -491,19 +515,20 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         ksort($temp);
 
         $this->talHandlers = array();
-        foreach($temp as $prio => $dat) {
+        foreach ($temp as $prio => $dat) {
             list($nsattr, $domattr) = $dat;
             $handler = $nsattr->createAttributeHandler($this, $domattr->getValue());
             $this->talHandlers[$prio] = $handler;
 
-            if ($nsattr instanceOf PHPTAL_NamespaceAttributeSurround)
+            if ($nsattr instanceof PHPTAL_NamespaceAttributeSurround)
                 $this->surroundAttributes[] = $handler;
-            else if ($nsattr instanceOf PHPTAL_NamespaceAttributeReplace)
+            else if ($nsattr instanceof PHPTAL_NamespaceAttributeReplace)
                 $this->replaceAttributes[] = $handler;
-            else if ($nsattr instanceOf PHPTAL_NamespaceAttributeContent)
+            else if ($nsattr instanceof PHPTAL_NamespaceAttributeContent)
                 $this->contentAttributes[] = $handler;
             else
-                throw new PHPTAL_ParserException("Unknown namespace attribute class ".get_class($nsattr));
+                throw new PHPTAL_ParserException("Unknown namespace attribute class ".get_class($nsattr),
+                            $this->getSourceFile(), $this->getSourceLine());
 
         }
     }
@@ -520,13 +545,12 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     function getLocalName()
     {
-        $n = explode(':', $this->qualifiedName,2);
+        $n = explode(':', $this->qualifiedName, 2);
         return end($n);
     }
-    
+
     function __toString()
     {
         return '<{'.$this->getNamespaceURI().'}:'.$this->getLocalName().'>';
     }
 }
-

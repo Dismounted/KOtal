@@ -9,15 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: GetTextTranslator.php 629 2009-06-05 23:03:28Z kornel $
+ * @version  SVN: $Id: GetTextTranslator.php 868 2010-05-25 22:27:39Z kornel $
  * @link     http://phptal.org/
  */
 
-PHPTAL::setIncludePath();
-
-require_once 'PHPTAL/TranslationService.php';
-
-PHPTAL::restoreIncludePath();
 
 /**
  * PHPTAL_TranslationService gettext implementation.
@@ -36,7 +31,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     private $_currentDomain;
     private $_encoding = 'UTF-8';
     private $_canonicalize = false;
-    
+
     public function __construct()
     {
         if (!function_exists('gettext')) throw new PHPTAL_ConfigurationException("Gettext not installed");
@@ -78,18 +73,18 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     public function setLanguage(/*...*/)
     {
         $langs = func_get_args();
-        
-        $langCode = $this->trySettingLanguages(LC_ALL,$langs);        
+
+        $langCode = $this->trySettingLanguages(LC_ALL, $langs);
         if ($langCode) return $langCode;
-        
+
         if (defined("LC_MESSAGES")) {
-            $langCode = $this->trySettingLanguages(LC_MESSAGES,$langs);
+            $langCode = $this->trySettingLanguages(LC_MESSAGES, $langs);
             if ($langCode) return $langCode;
         }
-        
-        throw new PHPTAL_ConfigurationException('Language(s) code(s) "'.implode(', ', $langs).'" not supported by your system');        
+
+        throw new PHPTAL_ConfigurationException('Language(s) code(s) "'.implode(', ', $langs).'" not supported by your system');
     }
-    
+
     private function trySettingLanguages($category, array $langs)
     {
         foreach ($langs as $langCode) {
@@ -100,7 +95,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
                 return $langCode;
             }
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -121,6 +116,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
      * Switches to one of the domains previously set via addDomain()
      *
      * @param string $domain name of translation domain to be used.
+     *
      * @return string - old domain
      */
     public function useDomain($domain)
@@ -153,7 +149,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         if ($htmlencode) {
             $value = htmlspecialchars($value, ENT_QUOTES);
         }
-        while (preg_match('/\${(.*?)\}/sm', $value, $m)){
+        while (preg_match('/\${(.*?)\}/sm', $value, $m)) {
             list($src, $var) = $m;
             if (!array_key_exists($var, $this->_vars)) {
                 throw new PHPTAL_VariableNotFoundException('Interpolation error. Translation uses ${'.$var.'}, which is not defined in the template (via i18n:name)');
@@ -172,7 +168,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         $key_ = trim($key_);
         $key_ = str_replace("\n", "", $key_);
         $key_ = str_replace("\r", "", $key_);
-        for ($i = 0; $i<strlen($key_); $i++){
+        for ($i = 0; $i<strlen($key_); $i++) {
             $c = $key_[$i];
             $o = ord($c);
             if ($o < 5 || $o > 127) {

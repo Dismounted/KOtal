@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: DocumentType.php 628 2009-06-05 08:54:34Z kornel $
+ * @version  SVN: $Id: DocumentType.php 794 2009-11-27 11:54:13Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -23,12 +23,9 @@ class PHPTAL_Dom_DocumentType extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if ($codewriter->getOutputMode() === PHPTAL::HTML5)
-        {
+        if ($codewriter->getOutputMode() === PHPTAL::HTML5) {
             $codewriter->setDocType('<!DOCTYPE html>');
-        }
-        else
-        {
+        } else {
             $codewriter->setDocType($this->getValueEscaped());
         }
         $codewriter->doDoctype();
