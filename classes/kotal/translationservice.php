@@ -31,12 +31,12 @@ class Kotal_TranslationService implements PHPTAL_TranslationService {
 	}
 
 	/**
-     * Translate given key.
-     *
-     * @param   string  key to translate
-     * @param   bool    if true, output will be HTML-escaped
-     */
-    public function translate($key, $htmlescape = true)
+	 * Translate given key.
+	 *
+	 * @param   string  key to translate
+	 * @param   bool    if true, output will be HTML-escaped
+	 */
+	public function translate($key, $htmlescape = true)
 	{
 		// Replace ${key} with :key and run through the translator
 		$text = __(preg_replace('/\$\{(.+?)\}/', ':$1', $key), $this->vars);
