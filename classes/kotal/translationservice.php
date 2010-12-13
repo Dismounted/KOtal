@@ -12,8 +12,8 @@
 
 require_once Kohana::find_file('vendor', 'phptal/PHPTAL/TranslationService');
 
-class Kotal_TranslationService implements PHPTAL_TranslationService
-{
+class Kotal_TranslationService implements PHPTAL_TranslationService {
+
 	/**
 	 * @var   array   replace all key with values in translated strings
 	 */

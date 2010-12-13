@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Resolver that allows PHPTAL to load macros.
+ * Resolver that allows PHPTAL to resolve paths in the Kohana filesystem.
  *
  * @package    KOtal
  * @category   Base
@@ -12,16 +12,24 @@
 
 require_once Kohana::find_file('vendor', 'phptal/PHPTAL/SourceResolver');
 
-class Kotal_Resolver implements PHPTAL_SourceResolver
-{
+class Kotal_SourceResolver implements PHPTAL_SourceResolver {
+
+	/**
+	 * Resolves files according to Kohana conventions.
+	 *
+	 * @param   string  path to resolve
+	 * @return  PHPTAL_Source
+	 */
     public function resolve($path)
     {
 		$path = str_replace(array(APPPATH.'views/', '.php'), array('', ''), $path);
 		$file = Kohana::find_file('views', $path);
+
 		if ($file)
 		{
 			return new PHPTAL_FileSource($file);
 		}
+
         return null;
     }
 }

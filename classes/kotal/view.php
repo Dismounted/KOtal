@@ -65,7 +65,7 @@ class Kotal_View extends Kohana_View {
 		$tal->setTranslator(new Kotal_TranslationService);
 
 		// Add the source resolver
-		$tal->addSourceResolver(new Kotal_Resolver($kohana_view_filename));
+		$tal->addSourceResolver(new Kotal_SourceResolver($kohana_view_filename));
 
 		// Import the view variables to TAL namespace
 		foreach ($kohana_view_data AS $name => $value)
