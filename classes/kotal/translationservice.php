@@ -12,7 +12,7 @@
 
 require_once Kohana::find_file('vendor', 'phptal/PHPTAL/TranslationService');
 
-class Kotal_Translator implements PHPTAL_TranslationService
+class Kotal_TranslationService implements PHPTAL_TranslationService
 {
 	private $vars = array();
 	
