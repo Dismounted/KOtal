@@ -1,4 +1,13 @@
-<?php
+<?php defined('SYSPATH') or die('No direct script access.');
+/**
+ * Allows PHPTAL to take advantage of the Kohana i18n tranlator.
+ *
+ * @package    KOtal
+ * @category   Base
+ * @author     Hanson Wong, johanlindblad
+ * @copyright  (c) 2010 Hanson Wong
+ * @license    http://github.com/Dismounted/KOtal/blob/master/LICENSE
+ */
 
 require_once Kohana::find_file('vendor', 'phptal/PHPTAL/TranslationService');
 
@@ -40,5 +49,3 @@ class Kotal_Translator implements PHPTAL_TranslationService
 		
 	}
 }
-
-?>
