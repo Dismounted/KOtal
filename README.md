@@ -12,6 +12,8 @@ To begin, store all the KOtal files under modules/kotal/ and enable it through b
 
 For the most part, simply create and call views like you would normally under Kohana 3. The only difference is that the view code itself is under TAL rules.
 
+KOtal also routes i18n requests into native Kohana methods.
+
 There are a few 'advanced' options, and they are shown in the examples below.
 
 Example
