@@ -20,11 +20,11 @@ class Kotal_TranslationService implements PHPTAL_TranslationService {
 	protected $vars = array();
 
 	/**
-     * Set an interpolation var.
-     *
-     * @param   string  key
-     * @param   string  value
-     */
+	 * Set an interpolation var.
+	 *
+	 * @param   string  key
+	 * @param   string  value
+	 */
 	public function setVar($key, $value)
 	{
 		$this->vars[':'.$key] = $value;

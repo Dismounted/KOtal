@@ -20,8 +20,8 @@ class Kotal_SourceResolver implements PHPTAL_SourceResolver {
 	 * @param   string  path to resolve
 	 * @return  PHPTAL_Source
 	 */
-    public function resolve($path)
-    {
+	public function resolve($path)
+	{
 		$path = str_replace(array(APPPATH.'views/', '.php'), array('', ''), $path);
 		$file = Kohana::find_file('views', $path);
 
@@ -30,6 +30,6 @@ class Kotal_SourceResolver implements PHPTAL_SourceResolver {
 			return new PHPTAL_FileSource($file);
 		}
 
-        return null;
-    }
+		return null;
+	}
 }
