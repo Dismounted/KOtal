@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Attributes.php 605 2009-05-03 02:50:26Z kornel $
+ * @version  SVN: $Id: Attributes.php 914 2010-06-20 21:02:58Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -73,15 +73,17 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                 $code = $this->_getTranslationCode($codewriter, $key);
             } else {
                 $attr = $this->phpelement->getAttributeNode($qname);
-                if (!$attr) throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because there is no translation key specified");
+                if (!$attr) throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because there is no translation key specified",
+                                        $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
 
                 if ($attr->getReplacedState() === PHPTAL_Dom_Attr::NOT_REPLACED) {
                     $code = $this->_getTranslationCode($codewriter, $attr->getValue());
                 } elseif ($attr->getReplacedState() === PHPTAL_Dom_Attr::VALUE_REPLACED && $attr->getOverwrittenVariableName()) {
-                        // sadly variables won't be interpolated in this translation
-                        $code = 'echo '.$codewriter->escapeCode('$_translator->translate('.$attr->getOverwrittenVariableName().', false)');
+                    // sadly variables won't be interpolated in this translation
+                    $code = 'echo '.$codewriter->escapeCode('$_translator->translate('.$attr->getOverwrittenVariableName().', false)');
                 } else {
-                        throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because other TAL attributes are using it");
+                    throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because other TAL attributes are using it",
+                                $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
                 }
             }
             $this->phpelement->getOrCreateAttributeNode($qname)->overwriteValueWithCode($code);

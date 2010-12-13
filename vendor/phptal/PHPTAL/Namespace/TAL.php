@@ -9,19 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: TAL.php 610 2009-05-24 00:32:13Z kornel $
+ * @version  SVN: $Id: TAL.php 868 2010-05-25 22:27:39Z kornel $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute/TAL/Comment.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Replace.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Content.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Condition.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Attributes.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Repeat.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
-require_once 'PHPTAL/Php/Attribute/TAL/OnError.php';
-require_once 'PHPTAL/Php/Attribute/TAL/OmitTag.php';
 
 /**
  * @package PHPTAL

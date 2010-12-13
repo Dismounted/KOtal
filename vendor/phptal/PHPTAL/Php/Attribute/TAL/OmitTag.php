@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: OmitTag.php 605 2009-05-03 02:50:26Z kornel $
+ * @version  SVN: $Id: OmitTag.php 794 2009-11-27 11:54:13Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -51,8 +51,7 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
     {
         if (trim($this->expression) == '') {
             $this->phpelement->headFootDisabled = true;
-        }
-        else {
+        } else {
 
             $this->varname = $codewriter->createTempVariable();
 

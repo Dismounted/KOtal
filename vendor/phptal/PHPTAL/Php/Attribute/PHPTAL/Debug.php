@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Debug.php 605 2009-05-03 02:50:26Z kornel $
+ * @version  SVN: $Id: Debug.php 835 2010-01-24 20:50:59Z kornel $
  * @link     http://phptal.org/
  */
 /**
@@ -17,7 +17,7 @@
  * @subpackage Php.attribute.phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_PHPTAL_DEBUG extends PHPTAL_Php_Attribute
+class PHPTAL_Php_Attribute_PHPTAL_Debug extends PHPTAL_Php_Attribute
 {
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {

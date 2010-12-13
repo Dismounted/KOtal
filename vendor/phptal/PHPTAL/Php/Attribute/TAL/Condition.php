@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Condition.php 671 2009-07-11 18:11:35Z kornel $
+ * @version  SVN: $Id: Condition.php 914 2010-06-20 21:02:58Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -85,7 +85,8 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
-        throw new PHPTAL_ParserException('\'default\' keyword not allowed on conditional expressions');
+        throw new PHPTAL_ParserException('\'default\' keyword not allowed on conditional expressions',
+                    $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
     }
 
 }

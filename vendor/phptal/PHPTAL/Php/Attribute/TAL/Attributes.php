@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Attributes.php 671 2009-07-11 18:11:35Z kornel $
+ * @version  SVN: $Id: Attributes.php 865 2010-05-25 22:16:24Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -41,17 +41,17 @@ implements PHPTAL_Php_TalesChainReader
 {
     /** before creates several variables that need to be freed in after */
     private $vars_to_recycle = array();
-    
+
     /**
      * value for default keyword
      */
     private $_default_escaped;
-    
+
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes using ; delimiter
         $attrs = $codewriter->splitExpression($this->expression);
-        foreach($attrs as $exp) {
+        foreach ($attrs as $exp) {
             list($qname, $expression) = $this->parseSetExpression($exp);
             if ($expression) {
                 $this->prepareAttribute($codewriter, $qname, $expression);
@@ -66,7 +66,7 @@ implements PHPTAL_Php_TalesChainReader
 
         // XHTML boolean attribute does not appear when empty or false
         if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($qname)) {
-            
+
             // I don't want to mix code for boolean with chained executor
             // so compile it again to simple expression
             if (is_array($code)) {
@@ -84,8 +84,7 @@ implements PHPTAL_Php_TalesChainReader
         // i18n needs to read replaced value of the attribute, which is not possible if attribute is completely replaced with conditional code
         if ($this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/i18n', 'attributes')) {
             $this->prepareAttributeUnconditional($codewriter, $qname, $code);
-        }
-        else {
+        } else {
             $this->prepareAttributeConditional($codewriter, $qname, $code);
         }
     }
@@ -97,10 +96,11 @@ implements PHPTAL_Php_TalesChainReader
     {
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);
-        if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
+        if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE) {
             $value = $codewriter->stringifyCode($code);
-        else
+        } else {
             $value = $codewriter->escapeCode($code);
+        }
         $codewriter->doSetVar($attkey, $value);
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteValueWithVariable($attkey);
     }
@@ -113,7 +113,7 @@ implements PHPTAL_Php_TalesChainReader
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);
 
-        $codewriter->doIf("NULL !== ($attkey = ($code))");
+        $codewriter->doIf("null !== ($attkey = ($code))");
 
         if ($this->_echoType !== PHPTAL_Php_Attribute::ECHO_STRUCTURE)
             $codewriter->doSetVar($attkey, $codewriter->str(" $qname=\"").".".$codewriter->escapeCode($attkey).".'\"'");
@@ -166,7 +166,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        foreach($this->vars_to_recycle as $var) $codewriter->recycleTempVariable($var);
+        foreach ($this->vars_to_recycle as $var) $codewriter->recycleTempVariable($var);
     }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
@@ -197,9 +197,8 @@ implements PHPTAL_Php_TalesChainReader
 
         if (!$islast) {
             $condition = "!phptal_isempty($this->_attkey = ($exp))";
-        }
-        else {
-            $condition = "NULL !== ($this->_attkey = ($exp))";
+        } else {
+            $condition = "null !== ($this->_attkey = ($exp))";
         }
         $executor->doIf($condition);
 

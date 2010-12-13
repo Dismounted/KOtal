@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Transformer.php 605 2009-05-03 02:50:26Z kornel $
+ * @version  SVN: $Id: Transformer.php 865 2010-05-25 22:16:24Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -58,7 +58,7 @@ class PHPTAL_Php_Transformer
         $i = 0;
         $inString = false;
         $backslashed = false;
-        $instanceOf = false;
+        $instanceof = false;
         $eval = false;
 
 
@@ -70,7 +70,7 @@ class PHPTAL_Php_Transformer
 
                 // after whitespace a variable-variable may start, ${var} → $ctx->{$ctx->var}
                 case self::ST_WHITE:
-                    if ($c === '$' && $i < $len-2 && $str[$i+1] === '{')
+                    if ($c === '$' && $i+1 < $len && $str[$i+1] === '{')
                     {
                         $result .= $prefix;
                         $state = self::ST_NONE;
@@ -81,14 +81,20 @@ class PHPTAL_Php_Transformer
                 // no specific state defined, just eat char and see what to do with it.
                 case self::ST_NONE:
                     // begin of eval without {
-                    if ($c === '$' && $i < $len && self::isAlpha($str[$i+1])) {
+                    if ($c === '$' && $i+1 < $len && self::isAlpha($str[$i+1])) {
                         $state = self::ST_EVAL;
                         $mark = $i+1;
                         $result .= $prefix.'{';
                     }
+                    elseif (self::isDigit($c))
+                    {
+                        $state = self::ST_NUM;
+                        $mark = $i;
+                    }
                     // that an alphabetic char, then it should be the begining
-                    // of a var
-                    elseif (self::isAlpha($c) || $c==='_') {
+                    // of a var or static
+                    // && !self::isDigit($c) checked earlier
+                    elseif (self::isVarNameChar($c)) {
                         $state = self::ST_VAR;
                         $mark = $i;
                     }
@@ -109,7 +115,7 @@ class PHPTAL_Php_Transformer
                         $result .= $c;
                         // if next char is dot then an object member must
                         // follow
-                        if ($i < $len-1 && $str[$i+1] === '.') {
+                        if ($i+1 < $len && $str[$i+1] === '.') {
                             $result .= '->';
                             $state = self::ST_MEMBER;
                             $mark = $i+2;
@@ -170,7 +176,7 @@ class PHPTAL_Php_Transformer
                     }
                     // instring interpolation, search } and transform the
                     // interpollation to insert it into the string
-                    elseif ($c === '$' && $i < $len && $str[$i+1] === '{') {
+                    elseif ($c === '$' && $i+1 < $len && $str[$i+1] === '{') {
                         $result .= substr($str, $mark, $i-$mark) . '{';
 
                         $sub = 0;
@@ -199,7 +205,7 @@ class PHPTAL_Php_Transformer
                         $mark = $i+1;
                     }
                     // static call, the var is a class name
-                    elseif ($c === ':') {
+                    elseif ($c === ':' && $i+1 < $len && $str[$i+1] === ':') {
                         $result .= substr($str, $mark, $i-$mark+1);
                         $mark = $i+1;
                         $i++;
@@ -236,13 +242,13 @@ class PHPTAL_Php_Transformer
                         // instanceof keyword
                         elseif ($low === 'instanceof') {
                             $result .= $var;
-                            $instanceOf = true;
+                            $instanceof = true;
                         }
                         // previous was instanceof
-                        elseif ($instanceOf) {
+                        elseif ($instanceof) {
                             // last was instanceof, this var is a class name
                             $result .= $var;
-                            $instanceOf = false;
+                            $instanceof = false;
                         }
                         // regular variable
                         else {
@@ -290,7 +296,11 @@ class PHPTAL_Php_Transformer
                     }
                     // regular end of member, it is a var
                     else {
-                        $result .= substr($str, $mark, $i-$mark);
+                        $var = substr($str, $mark, $i-$mark);
+                        if ($var !== '' && !preg_match('/^[a-z][a-z0-9_\x7f-\xff]*$/i',$var)) {
+                            throw new PHPTAL_ParserException("Invalid field name '$var' in expression php:$str");
+                        }
+                        $result .= $var;
                         if ($eval) { $result .='}'; $eval = false; }
                         $state = self::ST_NONE;
                         $i--;
@@ -347,8 +357,18 @@ class PHPTAL_Php_Transformer
                 // numeric value
                 case self::ST_NUM:
                     if (!self::isDigitCompound($c)) {
-                        $result .= substr($str, $mark, $i-$mark);
+                        $var = substr($str, $mark, $i-$mark);
+
+                        if (self::isAlpha($c) || $c === '_') {
+                            throw new PHPTAL_ParserException("Syntax error in number '$var$c' in expression php:$str");
+                        }
+                        if (!is_numeric($var)) {
+                            throw new PHPTAL_ParserException("Syntax error in number '$var' in expression php:$str");
+                        }
+
+                        $result .= $var;
                         $state = self::ST_NONE;
+                        $i--;
                     }
                     break;
             }
@@ -368,6 +388,11 @@ class PHPTAL_Php_Transformer
         return $c >= 'a' && $c <= 'z';
     }
 
+    private static function isDigit($c)
+    {
+        return ($c >= '0' && $c <= '9');
+    }
+
     private static function isDigitCompound($c)
     {
         return ($c >= '0' && $c <= '9' || $c === '.');
@@ -375,7 +400,7 @@ class PHPTAL_Php_Transformer
 
     private static function isVarNameChar($c)
     {
-        return self::isAlpha($c) || ($c >= '0' && $c <= '9') || $c === '_';
+        return self::isAlpha($c) || ($c >= '0' && $c <= '9') || $c === '_' || $c === '\\';
     }
 
     private static $TranslationTable = array(
