@@ -60,10 +60,10 @@ class Kotal_View extends Kohana_View {
 
 		// Set TAL template file path
 		$tal->setTemplate($kohana_view_filename);
-		
+
 		// Set the translator
-		$tal->setTranslator(new Kotal_Translator());
-		
+		$tal->setTranslator(new Kotal_TranslationService);
+
 		// Add the source resolver
 		$tal->addSourceResolver(new Kotal_Resolver($kohana_view_filename));
 
