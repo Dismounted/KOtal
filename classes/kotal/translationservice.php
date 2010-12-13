@@ -20,15 +20,14 @@ class Kotal_TranslationService implements PHPTAL_TranslationService
 	protected $vars = array();
 
 	/**
-     * Set an interpolation var. The "value" is not needed as we use Kohana's
-     * system to translate.
+     * Set an interpolation var.
      *
      * @param   string  key
-     * @param   string  not used or needed in KOtal
+     * @param   string  value
      */
 	public function setVar($key, $value)
 	{
-		$this->vars[] = $key;
+		$this->vars[':'.$key] = $value;
 	}
 
 	/**
