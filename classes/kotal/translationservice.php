@@ -14,39 +14,54 @@ require_once Kohana::find_file('vendor', 'phptal/PHPTAL/TranslationService');
 
 class Kotal_TranslationService implements PHPTAL_TranslationService
 {
-	private $vars = array();
+	/**
+	 * @var   array   replace all key with values in translated strings
+	 */
+	protected $vars = array();
 
-	// Not implemented and probably not needed
-	function setLanguage()
+	/**
+     * Set an interpolation var. The "value" is not needed as we use Kohana's
+     * system to translate.
+     *
+     * @param   string  key
+     * @param   string  not used or needed in KOtal
+     */
+	public function setVar($key, $value)
 	{
-		
+		$this->vars[] = $key;
 	}
 
-    function setEncoding($encoding)
+	/**
+     * Translate given key.
+     *
+     * @param   string  key to translate
+     * @param   bool    if true, output will be HTML-escaped
+     */
+    public function translate($key, $htmlescape = true)
 	{
-		
-	}
-
-    function useDomain($domain)
-	{
-		
-	}
-
-	function setVar($key, $value)
-	{
-		$this->vars[':'.$key] = $value;
-	}
-
-    function translate($key, $htmlescape=true)
-	{
-		// Replace ${var} with :var and run through the translator
+		// Replace ${key} with :key and run through the translator
 		$text = __(preg_replace('/\$\{(.+?)\}/', ':$1', $key), $this->vars);
+
+		// If comment is removed, you'll only be able to use <tal:block> for
+		// i18n:name attributes.
 		if ($htmlescape)
 		{
-			// Remove comment if you want to. Then you'll only be able to use
-			// <tal:block> for i18n:name attributes.
-			// return htmlentities($text);
+			//return htmlentities($text);
 		}
+
 		return $text;
+	}
+
+	// Not implemented and probably not needed
+	public function setLanguage()
+	{
+	}
+
+	public function setEncoding($encoding)
+	{
+	}
+
+	public function useDomain($domain)
+	{
 	}
 }
