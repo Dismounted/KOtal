@@ -9,14 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: I18N.php 610 2009-05-24 00:32:13Z kornel $
+ * @version  SVN: $Id: I18N.php 868 2010-05-25 22:27:39Z kornel $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute/I18N/Translate.php';
-require_once 'PHPTAL/Php/Attribute/I18N/Name.php';
-require_once 'PHPTAL/Php/Attribute/I18N/Domain.php';
-require_once 'PHPTAL/Php/Attribute/I18N/Attributes.php';
 
 /**
  * @package PHPTAL

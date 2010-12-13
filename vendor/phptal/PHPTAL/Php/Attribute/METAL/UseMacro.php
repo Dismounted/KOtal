@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: UseMacro.php 678 2009-07-20 11:59:12Z kornel $
+ * @version  SVN: $Id: UseMacro.php 833 2010-01-24 20:46:40Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -107,7 +107,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
      */
     private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Dom_Node $phpelement)
     {
-        if (false == ($phpelement instanceOf PHPTAL_Dom_Element)) {
+        if (false == ($phpelement instanceof PHPTAL_Dom_Element)) {
             return;
         }
 

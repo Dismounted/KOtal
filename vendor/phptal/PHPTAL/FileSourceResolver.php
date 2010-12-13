@@ -9,13 +9,9 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: FileSourceResolver.php 731 2009-09-25 16:31:56Z kornel $
+ * @version  SVN: $Id: FileSourceResolver.php 868 2010-05-25 22:27:39Z kornel $
  * @link     http://phptal.org/
  */
- 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/SourceResolver.php';
-PHPTAL::restoreIncludePath();
 
 
 /**

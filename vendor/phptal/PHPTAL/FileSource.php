@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: FileSource.php 731 2009-09-25 16:31:56Z kornel $
+ * @version  SVN: $Id: FileSource.php 865 2010-05-25 22:16:24Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -21,11 +21,11 @@
 class PHPTAL_FileSource implements PHPTAL_Source
 {
     private $_path;
-    
+
     public function __construct($path)
     {
         $this->_path = realpath($path);
-        if ($this->_path === false) throw new PHPTAL_IOException("Unable to find real path of file '$path'");
+        if ($this->_path === false) throw new PHPTAL_IOException("Unable to find real path of file '$path' (in ".getcwd().')');
     }
 
     public function getRealPath()
@@ -41,7 +41,7 @@ class PHPTAL_FileSource implements PHPTAL_Source
     public function getData()
     {
         $content = file_get_contents($this->_path);
-        
+
         // file_get_contents returns "" when loading directory!?
         if (false === $content || ("" === $content && is_dir($this->_path))) {
             throw new PHPTAL_IOException("Unable to load file ".$this->_path);

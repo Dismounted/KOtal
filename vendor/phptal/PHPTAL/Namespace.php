@@ -9,12 +9,10 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Namespace.php 677 2009-07-20 11:58:26Z kornel $
+ * @version  SVN: $Id: Namespace.php 868 2010-05-25 22:27:39Z kornel $
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute.php';
-require_once 'PHPTAL/NamespaceAttribute.php';
 
 /**
  * @see PHPTAL_NamespaceAttribute
@@ -25,7 +23,7 @@ abstract class PHPTAL_Namespace
 {
     private $prefix, $namespace_uri;
     protected $_attributes;
-    
+
     public function __construct($prefix, $namespace_uri)
     {
         if (!$namespace_uri || !$prefix) {

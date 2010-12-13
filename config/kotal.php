@@ -1,4 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+/**
+ * KOtal configuration file.
+ *
+ * @package    KOtal
+ * @category   Base
+ * @author     Hanson Wong
+ * @copyright  (c) 2010 Hanson Wong
+ * @license    http://github.com/Dismounted/KOtal/blob/master/LICENSE
+ */
 
 return array(
 

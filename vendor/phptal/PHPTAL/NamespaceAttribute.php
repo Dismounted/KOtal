@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: NamespaceAttribute.php 606 2009-05-03 03:01:47Z kornel $
+ * @version  SVN: $Id: NamespaceAttribute.php 887 2010-06-07 09:45:35Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -69,7 +69,7 @@ abstract class PHPTAL_NamespaceAttribute
 
     /** PHPTAL_Namespace */
     private $_namespace;
-    
+
     /**
      * @param string $name The attribute name
      * @param int $priority Attribute execution priority
@@ -96,31 +96,4 @@ abstract class PHPTAL_NamespaceAttribute
     {
         return $this->_namespace->createAttributeHandler($this, $tag, $expression);
     }
-}
-
-/**
- * This type of attribute wraps element
- * @package PHPTAL
- * @subpackage Namespace
- */
-class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
-{
-}
-
-/**
- * This type of attribute replaces element entirely
- * @package PHPTAL
- * @subpackage Namespace
- */
-class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute
-{
-}
-
-/**
- * This type of attribute replaces element's content entirely
- * @package PHPTAL
- * @subpackage Namespace
- */
-class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute
-{
 }

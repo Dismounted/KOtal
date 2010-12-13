@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Attr.php 715 2009-09-14 22:57:56Z kornel $
+ * @version  SVN: $Id: Attr.php 865 2010-05-25 22:16:24Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -75,18 +75,18 @@ class PHPTAL_Dom_Attr
      */
     function getLocalName()
     {
-        $n = explode(':', $this->qualified_name,2);
+        $n = explode(':', $this->qualified_name, 2);
         return end($n);
     }
-    
+
     /**
      * Returns true if this attribute is ns declaration (xmlns="...")
-     *  
+     *
      * @return bool
      */
     function isNamespaceDeclaration()
     {
-        return preg_match('/^xmlns(?:$|:)/',$this->qualified_name);
+        return preg_match('/^xmlns(?:$|:)/', $this->qualified_name);
     }
 
 
@@ -107,7 +107,7 @@ class PHPTAL_Dom_Attr
     {
         $this->value_escaped = htmlspecialchars($val);
     }
-    
+
     /**
      * Depends on replaced state.
      * If value is not replaced, it will return it with HTML escapes.
@@ -119,11 +119,11 @@ class PHPTAL_Dom_Attr
     {
         return $this->value_escaped;
     }
-    
+
     /**
-     * Set value of the attribute to this exact string. 
+     * Set value of the attribute to this exact string.
      * String must be HTML-escaped and use attribute's encoding.
-     * 
+     *
      * @param string $value_escaped new content
      */
     function setValueEscaped($value_escaped)
@@ -137,7 +137,7 @@ class PHPTAL_Dom_Attr
      */
     private function setPHPCode($code)
     {
-        $this->value_escaped = '<?php '.$code.' ?>';
+        $this->value_escaped = '<?php '.$code." ?>\n";
     }
 
     /**
@@ -174,10 +174,10 @@ class PHPTAL_Dom_Attr
     function overwriteValueWithCode($code)
     {
         $this->replacedState = self::VALUE_REPLACED;
-        $this->phpVariable = NULL;
+        $this->phpVariable = null;
         $this->setPHPCode($code);
     }
-    
+
     /**
      * if value was overwritten with variable, get its name
      */

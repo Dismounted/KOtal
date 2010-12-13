@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: SaxXmlParser.php 758 2009-10-24 23:55:29Z kornel $
+ * @version  SVN: $Id: SaxXmlParser.php 896 2010-06-13 23:02:28Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -185,7 +185,7 @@ class PHPTAL_Dom_SaxXmlParser
                             } else /* isWhiteChar */ {
                                 $state = self::ST_TAG_ATTRIBUTES;
                             }
-                        }                        
+                        }
                         break;
 
                     case self::ST_TAG_CLOSE:
@@ -320,6 +320,10 @@ class PHPTAL_Dom_SaxXmlParser
                     case self::ST_ATTR_QUOTE:
                         if ($c === $quoteStyle) {
                             $attributes[$attribute] = $this->sanitizeEscapedText($this->checkEncoding(substr($src, $mark, $i-$mark)));
+
+                            // PHPTAL's code generator assumes input is escaped for double-quoted strings. Single-quoted attributes need to be converted.
+                            // FIXME: it should be escaped at later stage.
+                            $attributes[$attribute] = str_replace('"',"&quot;", $attributes[$attribute]);
                             $state = self::ST_TAG_BETWEEN_ATTRIBUTE;
                         }
                         break;
@@ -360,15 +364,14 @@ class PHPTAL_Dom_SaxXmlParser
     private function checkEncoding($str)
     {
         if ($str === '') return '';
-        
+
         if ($this->input_encoding === 'UTF-8') {
-            
+
             // $match expression below somehow triggers quite deep recurrency and stack overflow in preg
             // to avoid this, check string bit by bit, omitting ASCII fragments.
-            if (strlen($str) > 200)
-            {                  
-                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,NULL,PREG_SPLIT_NO_EMPTY);  
-                foreach($chunks as $chunk) {
+            if (strlen($str) > 200) {
+                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,null,PREG_SPLIT_NO_EMPTY);
+                foreach ($chunks as $chunk) {
                     if (strlen($chunk) < 200) {
                         $this->checkEncoding($chunk);
                     }
@@ -389,12 +392,12 @@ class PHPTAL_Dom_SaxXmlParser
                . '|\xF4[\x80-\x8F][\x80-\xBF]{2}';    // plane 16
 
             if (!preg_match('/^(?:(?>'.$match.'))+$/s',$str)) {
-                $res = preg_split('/((?>'.$match.')+)/s',$str,NULL,PREG_SPLIT_DELIM_CAPTURE);
+                $res = preg_split('/((?>'.$match.')+)/s',$str,null,PREG_SPLIT_DELIM_CAPTURE);
                 for($i=0; $i < count($res); $i+=2)
                 {
                     $res[$i] = self::convertBytesToEntities(array(1=>$res[$i]));
-                }                
-                $this->raiseError("Invalid UTF-8 bytes: ".implode('',$res));
+                }
+                $this->raiseError("Invalid UTF-8 bytes: ".implode('', $res));
             }
         }
         if ($this->input_encoding === 'ISO-8859-1') {
@@ -402,8 +405,8 @@ class PHPTAL_Dom_SaxXmlParser
             // http://www.w3.org/TR/2006/REC-xml11-20060816/#NT-RestrictedChar
             $forbid = '/((?>[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F]+))/s';
 
-            if (preg_match($forbid,$str)) {
-                $str = preg_replace_callback($forbid,array('self','convertBytesToEntities'),$str);
+            if (preg_match($forbid, $str)) {
+                $str = preg_replace_callback($forbid, array('self', 'convertBytesToEntities'), $str);
                 $this->raiseError("Invalid ISO-8859-1 characters: ".$str);
             }
         }
@@ -414,8 +417,9 @@ class PHPTAL_Dom_SaxXmlParser
     /**
      * preg callback
      * Changes all bytes to hexadecimal XML entities
-     * 
+     *
      * @param array $m first array element is used for input
+     *
      * @return string
      */
     private static function convertBytesToEntities(array $m)
@@ -433,23 +437,25 @@ class PHPTAL_Dom_SaxXmlParser
      */
     private function sanitizeEscapedText($str)
     {
-        $str = str_replace('&apos;','&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
+        $str = str_replace('&apos;', '&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
 
-        /* this is ugly kludge to keep <?php ?> blocks unescaped (even in attributes) */
+        /* <?php ?> blocks can't reliably work in attributes (due to escaping impossible in XML)
+           so they have to be converted into special TALES expression
+        */
         $types = ini_get('short_open_tag')?'php|=|':'php';
-        $split = preg_split("/(<\?(?:$types).*?\?>)/", $str, null, PREG_SPLIT_DELIM_CAPTURE);
+        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self', 'convertPHPBlockToTALES'), $str);
 
-        for($i=0; $i < count($split); $i+=2)
-        {
-            // escape invalid entities and < >
-            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $split[$i]),array('<'=>'&lt;', ']]>'=>']]&gt;'));
-        }
-        return implode('', $split);
+        // corrects all non-entities and neutralizes potentially problematic CDATA end marker
+        $str = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $str), array('<'=>'&lt;', ']]>'=>']]&gt;'));
+
+        return $str;
     }
 
-    public static function _htmlspecialchars($m)
+    private static function convertPHPBlockToTALES($m)
     {
-        return htmlspecialchars($m[0]);
+        list(, $type, $code) = $m;
+        if ($type === '=') $code = 'echo '.$code;
+        return '${structure phptal-internal-php-block:'.rawurlencode($code).'}';
     }
 
     public function getSourceFile()

@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: DefineMacro.php 709 2009-09-03 16:22:19Z kornel $
+ * @version  SVN: $Id: DefineMacro.php 914 2010-06-20 21:02:58Z kornel $
  * @link     http://phptal.org/
  */
 
@@ -42,12 +42,13 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
     {
         $macroname = strtr(trim($this->expression), '-', '_');
         if (!preg_match('/^[a-z0-9_]+$/i', $macroname)) {
-            throw new PHPTAL_ParserException('Bad macro name "'.$macroname.'"', $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
+            throw new PHPTAL_ParserException('Bad macro name "'.$macroname.'"',
+                $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
 
-        if ($codewriter->functionExists($macroname))
-        {
-            throw new PHPTAL_TemplateException("Macro $macroname is defined twice");
+        if ($codewriter->functionExists($macroname)) {
+            throw new PHPTAL_TemplateException("Macro $macroname is defined twice",
+                $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
 
         $codewriter->doFunction($macroname, 'PHPTAL $_thistpl, PHPTAL $tpl');
