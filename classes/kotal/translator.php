@@ -4,7 +4,8 @@
  *
  * @package    KOtal
  * @category   Base
- * @author     Hanson Wong, johanlindblad
+ * @author     Hanson Wong
+ * @author     johanlindblad
  * @copyright  (c) 2010 Hanson Wong
  * @license    http://github.com/Dismounted/KOtal/blob/master/LICENSE
  */
