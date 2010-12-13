@@ -15,7 +15,23 @@ require_once Kohana::find_file('vendor', 'phptal/PHPTAL/TranslationService');
 class Kotal_TranslationService implements PHPTAL_TranslationService
 {
 	private $vars = array();
-	
+
+	// Not implemented and probably not needed
+	function setLanguage()
+	{
+		
+	}
+
+    function setEncoding($encoding)
+	{
+		
+	}
+
+    function useDomain($domain)
+	{
+		
+	}
+
 	function setVar($key, $value)
 	{
 		$this->vars[':'.$key] = $value;
@@ -32,21 +48,5 @@ class Kotal_TranslationService implements PHPTAL_TranslationService
 			// return htmlentities($text);
 		}
 		return $text;
-	}
-	
-	// Not implemented and probably not needed
-	function setLanguage()
-	{
-		
-	}
-
-    function setEncoding($encoding)
-	{
-	
-	}
-
-    function useDomain($domain)
-	{
-		
 	}
 }
