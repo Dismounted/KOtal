@@ -10,8 +10,6 @@
  * @license    http://github.com/Dismounted/KOtal/blob/master/LICENSE
  */
 
-require_once Kohana::find_file('vendor', 'phptal/PHPTAL/TranslationService');
-
 class Kotal_TranslationService implements PHPTAL_TranslationService {
 
 	/**
