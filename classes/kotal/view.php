@@ -244,7 +244,7 @@ class Kotal_View extends Kohana_View {
 	protected function _check_tal_exclusions($clear = FALSE)
 	{
 		// Fetch current controller
-		$controller = UTF8::strtolower(Request::current()->controller);
+		$controller = UTF8::strtolower(Request::initial()->controller());
 
 		// Cache exclusion list if it doesn't exist (saves calling strtolower)
 		if ($clear == TRUE OR self::$_tal_exclude === NULL)
