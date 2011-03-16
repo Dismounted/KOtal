@@ -24,7 +24,7 @@ class Kotal_View extends Kohana_View {
 	/**
 	 * @var array Cached list of excluded controllers
 	 */
-	protected static $_tal_exclude = array();
+	protected static $_tal_exclude;
 
 	/**
 	 * Overrides default constructor to also include the PHPTAL library.
@@ -128,7 +128,7 @@ class Kotal_View extends Kohana_View {
 		if ($this->_check_tal_exclusions() === FALSE)
 		{
 			// No TAL, just process as normal
-			return parent::_capture($this->_file, $this->_data);
+			return parent::capture($this->_file, $this->_data);
 		}
 		else
 		{
