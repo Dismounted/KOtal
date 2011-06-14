@@ -69,18 +69,18 @@ class Kotal_View extends Kohana_View {
 		$tal->addSourceResolver(new Kotal_SourceResolver($kohana_view_filename));
 
 		// Import the view variables to TAL namespace
-		foreach ($kohana_view_data AS $name => $value)
-		{
-			$tal->set($name, $value);
-		}
-
 		if (empty(self::$_global_data) === FALSE)
 		{
-			// Import the global view variables to TAL namespace and maintain references
+			// Do globals first so that it can be overriden
 			foreach (self::$_global_data AS $name => $value)
 			{
 				$tal->set($name, $value);
 			}
+		}
+
+		foreach ($kohana_view_data AS $name => $value)
+		{
+			$tal->set($name, $value);
 		}
 
 		// Capture the view output
