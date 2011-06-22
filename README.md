@@ -36,7 +36,7 @@ Then in your controller, add the following code to generate and display your vie
 	$view->title = 'People';
 	$view->people = $people;
 
-	$this->response->body($view->render());
+	$this->response->body($view);
 
 Accessing this action, you should see:
 
@@ -79,7 +79,7 @@ Lastly, other features that appear in Kohana's default handler should work in KO
 			'title' => 'People'
 		))
 		->set_filename('taltest');
-	$this->response->body($view->render());
+	$this->response->body($view);
 
 Caveats
 ----
