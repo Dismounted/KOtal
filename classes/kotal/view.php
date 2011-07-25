@@ -39,7 +39,7 @@ class Kotal_View extends Kohana_View {
 		parent::__construct($file, $data);
 
 		// Doing this now so we can access its constants
-		require_once Kohana::find_file('vendor', 'phptal/PHPTAL');
+		require_once Kohana_Core::find_file('vendor', 'phptal/PHPTAL');
 	}
 
 	/**
@@ -149,10 +149,10 @@ class Kotal_View extends Kohana_View {
 	public function set_filename($file)
 	{
 		// This can fail if the TAL extension is changed and a non-TAL view used
-		if (($path = Kohana::find_file('views', $file, Kohana::config('kotal.ext'))) === FALSE)
+		if (($path = Kohana_Core::find_file('views', $file, Kohana_Core::$config->load('kotal.ext'))) === FALSE)
 		{
 			// Obviously not TAL then, but is it a 'normal' view?
-			if (($path = Kohana::find_file('views', $file)) === FALSE)
+			if (($path = Kohana_Core::find_file('views', $file)) === FALSE)
 			{
 				throw new Kohana_View_Exception('The requested view :file could not be found', array(
 					':file' => $file,
@@ -249,7 +249,7 @@ class Kotal_View extends Kohana_View {
 		// Cache exclusion list if it doesn't exist (saves calling strtolower)
 		if ($clear == TRUE OR self::$_tal_exclude === NULL)
 		{
-			self::$_tal_exclude = Arr::map('UTF8::strtolower', Kohana::config('kotal.exclude'));
+			self::$_tal_exclude = Arr::map('UTF8::strtolower', Kohana::$config->load('kotal.exclude'));
 		}
 
 		// Check if this request should be excluded
