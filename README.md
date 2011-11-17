@@ -92,6 +92,16 @@ As KOtal overrides the default Kohana view handler, modules that use "normal" vi
 		'userguide',
 	),
 
+Alternatively, you can globally disable KOtal in config/kotal.php.
+
+	'enabled' => FALSE,
+	
+Then, as you convert each view, you can switch KOtal on for that one view.
+
+	$view->use_tal(TRUE);
+
+Once all of your views have been upgraded to use PHPTAL, you can switch KOtal on globally and remove all the use_tal(TRUE) calls.
+
 Modules that ship with Kohana 3 by default will already be covered in the default KOtal configuration. The only exception is the pagination module. If you would like to use this module with its supplied views, create a view before rendering like so:
 
 	$view = View::factory(Kohana::config('pagination.default.view'));
