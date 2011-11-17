@@ -10,7 +10,12 @@
  */
 
 return array(
-
+	
+	/**
+	 * Whether KOtal is enabled for every view by default or not.
+	 */
+	'enabled' => TRUE,
+	
 	/**
 	 * The file extension used for TAL view files. Default is 'php'.
 	 */

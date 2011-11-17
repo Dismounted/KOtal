@@ -19,12 +19,17 @@ class Kotal_View extends Kohana_View {
 	/**
 	 * @var bool Whether to enable tal on this view
 	 */
-	protected $_tal_enable = TRUE;
+	protected $_tal_enable;
 
 	/**
 	 * @var array Cached list of excluded controllers
 	 */
 	protected static $_tal_exclude;
+	
+	/**
+	 * @var bool Cached global setting to enable tal on views.
+	 */
+	protected static $_tal_enable_default;
 
 	/**
 	 * Overrides default constructor to also include the PHPTAL library.
@@ -37,9 +42,14 @@ class Kotal_View extends Kohana_View {
 	public function __construct($file = NULL, array $data = NULL)
 	{
 		parent::__construct($file, $data);
-
-		// Doing this now so we can access its constants
-		require_once Kohana_Core::find_file('vendor', 'phptal/PHPTAL');
+		
+		// Load the global setting if not already done.
+		if (self::$_tal_enable_default === NULL) {
+			self::$_tal_enable_default = Kohana::$config->load('kotal.enabled');
+		}
+		
+		// Use the global setting by default.
+		$this->use_tal(self::$_tal_enable_default);
 	}
 
 	/**
@@ -183,7 +193,11 @@ class Kotal_View extends Kohana_View {
 			return $this->_tal_enable;
 		}
 
-		$this->_tal_enable = (bool) $tal;
+		if ($this->_tal_enable = (bool) $tal) {
+			// Make sure the core of PHPTAL is loaded now, we'll need it.
+			require_once Kohana_Core::find_file('vendor', 'phptal/PHPTAL');
+		}
+		
 		return $this;
 	}
 
