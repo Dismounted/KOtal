@@ -22,8 +22,8 @@ class Kotal_SourceResolver implements PHPTAL_SourceResolver {
 	 */
 	public function resolve($path)
 	{
-		$path = str_replace(array(APPPATH.'views/', '.php'), '', $path);
 		$ext = Kohana::$config->load('kotal.ext');
+		$path = str_replace(array(APPPATH.'views/', '.' . $ext), '', $path);
 		$file = Kohana::find_file('views', $path, $ext);
 
 		if ($file)
